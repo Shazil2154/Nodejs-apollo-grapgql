@@ -11,8 +11,7 @@ module.exports = {
         user,
       };
       post.comments.push(comment);
-      const result = await post.save();
-      return comment;
+      return await post.save();
     },
   },
 };

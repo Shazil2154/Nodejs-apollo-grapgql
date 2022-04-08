@@ -8,6 +8,6 @@ module.exports = gql`
   }
 
   extend type Mutation {
-    createComment(postId: ID!, message: String!, user: ID!): Comment
+    createComment(postId: ID!, message: String!, user: ID!): Post
   }
 `;
