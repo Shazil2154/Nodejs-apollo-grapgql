@@ -25,5 +25,17 @@ module.exports = {
       comment.remove();
       return await post.save();
     },
+    editComment: async (_, { postId, commentId, message }) => {
+      const post = await Post.findById(postId);
+      if (!post) {
+        throw new Error("Post not found");
+      }
+      const comment = post.comments.id(commentId);
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+      comment.message = message;
+      return await post.save();
+    },
   },
 };

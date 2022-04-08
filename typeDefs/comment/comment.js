@@ -10,5 +10,6 @@ module.exports = gql`
   extend type Mutation {
     createComment(postId: ID!, message: String!, user: ID!): Post
     deleteComment(postId: ID!, commentId: ID!): Post
+    editComment(postId: ID!, commentId: ID!, message: String!): Post
   }
 `;
