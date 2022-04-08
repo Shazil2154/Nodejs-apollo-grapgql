@@ -12,6 +12,7 @@ module.exports = gql`
   extend type Query {
     getAllPosts: [Post]
     getPost(id: ID!): Post
+    getPostsByUser(userId: ID!): [Post]
   }
 
   input PostInput {
