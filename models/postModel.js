@@ -13,22 +13,33 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  comments: [
+    {
+      message: {
+        type: String,
+        required: true,
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      required: false,
+    },
+  ],
 });
 
-postSchema.pre("save", function (next) {
+async function autoPopulate(next) {
   this.populate("author");
+  this.populate("comments.user");
   next();
-});
+}
 
-postSchema.pre("findOne", async function (next) {
-  this.populate("author");
-  next();
-});
+postSchema.pre("save", autoPopulate);
 
-postSchema.pre("find", async function (next) {
-  this.populate("author");
-  next();
-});
+postSchema.pre("findOne", autoPopulate);
+
+postSchema.pre("find", autoPopulate);
 
 const Post = mongoose.model("Post", postSchema);
 module.exports = Post;

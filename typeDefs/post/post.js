@@ -6,6 +6,7 @@ module.exports = gql`
     title: String
     content: String
     author: User
+    comments: [Comment]
   }
 
   extend type Query {
