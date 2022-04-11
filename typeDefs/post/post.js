@@ -26,4 +26,8 @@ module.exports = gql`
     updatePost(id: ID!, title: String, content: String): Post
     deletePost(id: ID!): Post
   }
+
+  extend type Subscription {
+    postAdded: Post
+  }
 `;
