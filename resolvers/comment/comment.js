@@ -1,4 +1,8 @@
 const Post = require("../../models/postModel");
+const { PubSub } = require("graphql-subscriptions");
+
+const pubsub = new PubSub();
+
 module.exports = {
   Mutation: {
     createComment: async (_, { postId, message, user }) => {
@@ -11,7 +15,10 @@ module.exports = {
         user,
       };
       post.comments.push(comment);
-      return await post.save();
+      const updatedPost = await post.save();
+      const postedComment = updatedPost.comments[updatedPost.comments.length - 1];
+      pubsub.publish(`COMMENT_ADDED-${updatedPost._id}`, { commentAdded: postedComment });
+      return updatedPost;
     },
     deleteComment: async (_, { postId, commentId }) => {
       const post = await Post.findById(postId);
@@ -36,6 +43,13 @@ module.exports = {
       }
       comment.message = message;
       return await post.save();
+    },
+  },
+  Subscription: {
+    commentAdded: {
+      subscribe: (_, { postId }) => {
+        return pubsub.asyncIterator(`COMMENT_ADDED-${postId}`);
+      },
     },
   },
 };

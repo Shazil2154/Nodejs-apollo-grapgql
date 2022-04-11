@@ -12,4 +12,8 @@ module.exports = gql`
     deleteComment(postId: ID!, commentId: ID!): Post
     editComment(postId: ID!, commentId: ID!, message: String!): Post
   }
+
+  extend type Subscription {
+    commentAdded(postId: ID!): Comment
+  }
 `;
