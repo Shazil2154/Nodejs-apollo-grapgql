@@ -1,4 +1,5 @@
 const Post = require("../../models/postModel");
+const { POST_ADDED } = require("../../constants");
 const { PubSub } = require("graphql-subscriptions");
 
 const pubsub = new PubSub();
@@ -12,7 +13,7 @@ module.exports = {
   Mutation: {
     createPost: async (parent, args, context, info) => {
       const post = await Post.create(args.post);
-      pubsub.publish("POST_ADDED", { postAdded: post });
+      pubsub.publish(POST_ADDED, { postAdded: post });
       return post;
     },
     updatePost: async (_, { id, title, content }) =>
@@ -21,7 +22,7 @@ module.exports = {
   },
   Subscription: {
     postAdded: {
-      subscribe: () => pubsub.asyncIterator("POST_ADDED"),
+      subscribe: () => pubsub.asyncIterator(POST_ADDED),
     },
   },
 };
